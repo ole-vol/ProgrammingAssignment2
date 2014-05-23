@@ -1,15 +1,38 @@
-## Put comments here that give an overall description of what your
-## functions do
+## A set function to create a matrix object which save, return and calculated the invers if it is already set or calculated.
 
-## Write a short comment describing this function
+## This function is to create a matrix with saves automaticaly its invers matrix
 
 makeCacheMatrix <- function(x = matrix()) {
-
+    invers <- NULL
+    set <- function(y) {
+        x <<- y
+        invers <<- NULL
+    }
+    get <- function() x
+    setinvers <- function(inv) invers <<- inv
+    getinvers <- function() invers
+    list(set = set, get = get,
+         setinvers = setinvers,
+         getinvers = getinvers)
 }
 
 
-## Write a short comment describing this function
+## This function return the invers of a matrix, if it is possible. Otherwise there is an massage.
+## If the invers is already calculated its returns the save invers. 
+## If not, the function saves the invers for later...g
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+    invers <- x$getinvers()
+    if(!is.null(invers)) {
+        message("getting cached data")
+        return(invers)
+    }
+    data <- x$get()
+    if(det(data)!=0){
+        invers <- solve(data, ...)
+        x$setinvers(invers)
+        invers
+    }
+    else
+        message("Matrix in not invertable")
 }
